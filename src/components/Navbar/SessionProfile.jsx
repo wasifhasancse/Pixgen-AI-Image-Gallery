@@ -1,13 +1,17 @@
 import { auth } from "@/lib/auth";
+import { Avatar } from "@heroui/react";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { BiLogOut } from "react-icons/bi";
+import { CgProfile } from "react-icons/cg";
+import { MdDashboard } from "react-icons/md";
 
 const SessionProfile = ({ session }) => {
   const user = session?.user;
+
+  if (!user) return null;
 
   const initials = user?.name
     ? user.name
@@ -31,46 +35,66 @@ const SessionProfile = ({ session }) => {
   const signOutAction = async () => {
     "use server";
     await auth.api.signOut({ headers: await headers() });
-    revalidatePath("/signin");
+    revalidatePath("/");
     redirect("/signin");
   };
 
   return (
     <div className="flex items-center gap-3">
-      {/* Avatar + name link to profile */}
-      <Link
-        href="/profile"
-        className="flex items-center gap-2 rounded-full pl-1 pr-3 py-1 hover:bg-gray-100 transition"
-      >
-        {hasValidImage ? (
-          <Image
-            src={user.image}
-            alt={user.name ?? "avatar"}
-            width={32}
-            height={32}
-            className="w-8 h-8 rounded-full object-cover border-2 border-violet-300"
-          />
-        ) : (
-          <span className="w-8 h-8 rounded-full bg-violet-100 border-2 border-violet-300 flex items-center justify-center text-xs font-bold text-violet-600">
-            {initials}
+      <details className="group relative">
+        <summary className="flex list-none cursor-pointer items-center gap-2 rounded-lg border border-slate-200 px-2 py-1.5 transition hover:bg-slate-50">
+          <Avatar size="sm" aria-label="Profile menu">
+            {hasValidImage ? (
+              <Avatar.Image
+                referrerPolicy="no-referrer"
+                alt={user?.name || "User"}
+                src={user?.image}
+              />
+            ) : null}
+            <Avatar.Fallback>{initials}</Avatar.Fallback>
+          </Avatar>
+          <span className="hidden max-w-28 truncate text-sm font-medium sm:inline">
+            {user?.name || "User"}
           </span>
-        )}
-        <span className="text-sm font-medium text-gray-700 hidden sm:block max-w-28 truncate">
-          {user?.name}
-        </span>
-      </Link>
+        </summary>
 
-      {/* Sign out */}
-      <form action={signOutAction}>
-        <button
-          type="submit"
-          title="Sign Out"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm text-rose-600 hover:bg-rose-50 border border-rose-200 transition font-medium cursor-pointer"
-        >
-          <BiLogOut className="text-base" />
-          <span className="hidden sm:inline">Sign Out</span>
-        </button>
-      </form>
+        <div className="absolute right-0 z-50 mt-2 w-64 rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
+          <div className="mb-2 rounded-lg bg-slate-50 px-3 py-2">
+            <p className="truncate text-sm font-semibold text-slate-800">
+              {user?.name || "User"}
+            </p>
+            <p className="truncate text-xs text-slate-500">{user?.email}</p>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <Link
+              href={`/dashboard/${user?.role || "seller"}`}
+              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100"
+            >
+              <MdDashboard className="text-base" />
+              Dashboard
+            </Link>
+
+            <Link
+              href="/profile"
+              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100"
+            >
+              <CgProfile className="text-base" />
+              Profile
+            </Link>
+
+            <form action={signOutAction}>
+              <button
+                type="submit"
+                className="flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-rose-600 transition hover:bg-rose-50"
+              >
+                <BiLogOut className="text-base" />
+                Logout
+              </button>
+            </form>
+          </div>
+        </div>
+      </details>
     </div>
   );
 };

@@ -45,22 +45,7 @@ const Navbar = async () => {
               Pricing
             </Link>
           </li>
-          <li>
-            <Link
-              href={"/profile"}
-              className="px-2 py-1 hover:bg-gray-200 rounded"
-            >
-              Profile
-            </Link>
-          </li>
-          <li>
-            <Link
-              href={"/add-photo"}
-              className="px-2 py-1 hover:bg-gray-200 rounded"
-            >
-              Add Photo
-            </Link>
-          </li>
+         
         </ul>
 
         <div className="flex gap-4">
