@@ -7,7 +7,7 @@ const plans = [
     price: 0,
     period: "month",
     ctaLabel: "Start Free",
-    ctaHref: "/signup",
+
     features: [
       "20 AI image generations per month",
       "Standard quality export",
@@ -22,7 +22,7 @@ const plans = [
     price: 19,
     period: "month",
     ctaLabel: "Upgrade to Pro",
-    ctaHref: "/signup",
+
     badge: "Most Popular",
     isFeatured: true,
     features: [
@@ -40,7 +40,7 @@ const plans = [
     price: 49,
     period: "month",
     ctaLabel: "Choose Studio",
-    ctaHref: "/signup",
+
     badge: "Team",
     features: [
       "Everything in Pro",

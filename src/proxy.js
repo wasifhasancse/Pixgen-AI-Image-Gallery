@@ -7,7 +7,7 @@ export async function proxy(request) {
     headers: await headers(),
   });
 
-  if (session?.user?.role == "seller" && session?.user?.plan === "free") {
+  if (session?.user?.role == "seller" && session?.user?.plan == "free") {
     return NextResponse.redirect(new URL("/pricing", request.url));
   }
 

@@ -1,3 +1,4 @@
+import { Button } from "@heroui/react";
 import Link from "next/link";
 import { HiCheckCircle } from "react-icons/hi2";
 
@@ -7,7 +8,6 @@ const PriceCard = ({
   price,
   period,
   ctaLabel,
-  ctaHref,
   features = [],
   badge,
   isFeatured = false,
@@ -46,8 +46,9 @@ const PriceCard = ({
           </span>
         </div>
 
-        <Link
-          href={ctaHref}
+        <form action={'/api/payment'} method="POST">
+          <Button
+            type="submit"
           className={`mt-6 inline-flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold transition ${
             isFeatured
               ? "bg-slate-900 text-white hover:bg-slate-800"
@@ -55,7 +56,8 @@ const PriceCard = ({
           }`}
         >
           {ctaLabel}
-        </Link>
+        </Button>
+        </form>
 
         <ul className="mt-6 space-y-3">
           {features.map((feature) => (
