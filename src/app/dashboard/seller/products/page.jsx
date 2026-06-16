@@ -1,5 +1,6 @@
 import AddProductModal from "@/components/Dashboard/Seller/AddProductModal";
 
+
 const SellerProductPage = () => {
   return (
     <section className="space-y-6">

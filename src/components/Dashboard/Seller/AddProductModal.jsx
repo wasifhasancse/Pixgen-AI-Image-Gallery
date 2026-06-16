@@ -1,5 +1,6 @@
 "use client";
 
+import { imageUpload } from "@/lib/Action/ImageUpload";
 import { useState } from "react";
 import { HiOutlinePhoto, HiOutlinePlus, HiOutlineXMark } from "react-icons/hi2";
 
@@ -24,6 +25,14 @@ const AddProductModal = ({
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+    const imageFile = await imageUpload(data.image);
+    console.log(data);
+    console.log(imageFile);
+    const productData = {
+      ...data,
+      image: imageFile.url
+    }
     if (typeof onSubmit === "function") {
       setSubmitting(true);
       try {
