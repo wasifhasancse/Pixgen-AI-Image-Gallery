@@ -1,7 +1,13 @@
 import AddProductModal from "@/components/Dashboard/Seller/AddProductModal";
+import ProductTable from "@/components/Dashboard/Seller/ProductTable";
+import { getProducts } from "@/lib/Action/product";
 
 
-const SellerProductPage = () => {
+const SellerProductPage = async ({ searchParams }) => {
+  const params = await searchParams;
+
+  const productsData = await getProducts(params?.page);
+  console.log(productsData);
   return (
     <section className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -16,11 +22,18 @@ const SellerProductPage = () => {
         <AddProductModal />
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-500 shadow-sm">
-        No products yet. Click{" "}
-        <span className="font-semibold">Add Product</span> to create your first
-        item.
-      </div>
+      {productsData?.photosData?.length > 0 ? (
+        <div className="">
+          <h2>Products</h2>
+          <ProductTable productsData={productsData} />
+        </div>
+      ) : (
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-500 shadow-sm">
+          No products yet. Click{" "}
+          <span className="font-semibold">Add Product</span> to create your first
+          item.
+        </div>
+      )}
     </section>
   );
 };
